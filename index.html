@@ -45,7 +45,7 @@
             // show loading information
             var url = document.getElementById("url-input").value.toString();
             document.getElementById("image-display").innerHTML =
-                `<img src="${url}" crossorigin="anonymous"/>`;
+                `<img src="/proxy?url=${url}" crossorigin="anonymous"/>`;
             var display = document.getElementById("label-display");
             display.innerHTML = "<h3>loading...</h3>";
 
