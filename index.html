@@ -22,37 +22,49 @@
         li {
             list-style-position: inside;
         }
+
+        img {
+            width: 60vw;
+        }
     </style>
 </head>
 
 <body>
     <div>
-        <h1>Guestlist on Cloud Run!</h1>
-        <div class="add-form">
-            <h3>Add a name to the guestlist</h3>
-            <form action="/add_name" method="post">
-                <input type="text" name="name" required>
-                <input type="submit" value="Add">
-            </form>
+        <h1>Image labelling on Cloud Run!</h1>
+        <div class="form">
+            <h3>Give an image to label</h3>
+            <input type="url" id="url-input" required>
+            <input type="submit" value="Submit" onclick="getLabels()">
         </div>
-        <div class="guest-list-display">
-            <h3>Who is on the guestlist:</h3>
-            <ul id="guest-list-ul"></ul>
-        </div>
+        <div id="image-display"></div>
+        <div id="label-display"> </div>
     </div>
     <script>
-        window.onload = function () {
+        var getLabels = function () {
+            // show loading information
+            var url = document.getElementById("url-input").value.toString();
+            document.getElementById("image-display").innerHTML =
+                `<img src="${url}" crossorigin="anonymous"/>`;
+            var display = document.getElementById("label-display");
+            display.innerHTML = "<h3>loading...</h3>";
+
+            // make request for labels and display them
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = function () {
-                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                    var names = JSON.parse(xmlHttp.responseText);
-                var namesHTML = ""
-                for (var i = 0; i < names.length; i++) {
-                    namesHTML += "<li>" + names[i] + "</li>";
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    var response = JSON.parse(xmlHttp.responseText);
+                    console.dir(response);
+                    var labelsHTML = "<h3>This looks like:</h3><br><p>";
+                    for (var i = 0; i < response.length; i++) {
+                        labelsHTML += response[i].description + ", ";
+                    }
+                    labelsHTML.trim(", ")
+                    labelsHTML += "</p>"
+                    display.innerHTML = labelsHTML;
                 }
-                document.getElementById("guest-list-ul").innerHTML = namesHTML;
             }
-            xmlHttp.open("GET", "/guests", true); // true for asynchronous 
+            xmlHttp.open("GET", `detect_labels?url=${url}`, true); // true for asynchronous 
             xmlHttp.send(null);
         }
     </script>
