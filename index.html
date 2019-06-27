@@ -24,7 +24,7 @@
         }
 
         img {
-            width: 60vw;
+            height: 60vh;
         }
     </style>
 </head>
@@ -33,7 +33,7 @@
     <div>
         <h1>Image labelling on Cloud Run!</h1>
         <div class="form">
-            <h3>Give an image to label</h3>
+            <h3>Give the url of an image to label</h3>
             <input type="url" id="url-input" required>
             <input type="submit" value="Submit" onclick="getLabels()">
         </div>
@@ -43,7 +43,9 @@
     <script>
         var getLabels = function () {
             // show loading information
-            var url = document.getElementById("url-input").value.toString();
+            var url_input = document.getElementById("url-input");
+            var url = url_input.value.toString();
+            url_input.value = "";
             document.getElementById("image-display").innerHTML =
                 `<img src="/proxy?url=${url}" crossorigin="anonymous"/>`;
             var display = document.getElementById("label-display");
@@ -59,8 +61,9 @@
                     for (var i = 0; i < response.length; i++) {
                         labelsHTML += response[i].description + ", ";
                     }
-                    labelsHTML.trim(", ")
-                    labelsHTML += "</p>"
+                    // trim trailing ", "
+                    labelsHTML = labelsHTML.substr(0, labelsHTML.length - 2);
+                    labelsHTML += "</p>";
                     display.innerHTML = labelsHTML;
                 }
             }
