@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CR Guestlist</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Open Sans', sans-serif;
+            text-align: center;
+        }
+
+        body {
+            padding-top: 24px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        li {
+            list-style-position: inside;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <h1>Guestlist on Cloud Run!</h1>
+        <div class="add-form">
+            <h3>Add a name to the guestlist</h3>
+            <form action="/add_name" method="post">
+                <input type="text" name="name" required>
+                <input type="submit" value="Add">
+            </form>
+        </div>
+        <div class="guest-list-display">
+            <h3>Who is on the guestlist:</h3>
+            <ul id="guest-list-ul"></ul>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    var names = JSON.parse(xmlHttp.responseText);
+                var namesHTML = ""
+                for (var i = 0; i < names.length; i++) {
+                    namesHTML += "<li>" + names[i] + "</li>";
+                }
+                document.getElementById("guest-list-ul").innerHTML = namesHTML;
+            }
+            xmlHttp.open("GET", "/guests", true); // true for asynchronous 
+            xmlHttp.send(null);
+        }
+    </script>
+</body>
+
+</html>

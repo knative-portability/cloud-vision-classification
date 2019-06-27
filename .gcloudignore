@@ -1,0 +1,6 @@
+# ignore git files
+.git
+.gitignore
+
+# node
+node_modules

@@ -1,0 +1,21 @@
+{
+  "name": "knative-serving-cloud-vision",
+  "version": "1.0.0",
+  "description": "Simple site to classify an image using the Google Cloud Vision API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": "https://github.com/knative-portability/cloud-vision-classification.git",
+  "author": "Gabriel Mukobi",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@google-cloud/vision": "^1.1.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-google": "^0.13.0"
+  }
+}
